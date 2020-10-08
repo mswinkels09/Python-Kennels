@@ -3,13 +3,11 @@ EMPLOYEES = [
       "id": 3,
       "name": "James Franklin",
       "locationId": 2,
-      "amployeeId": 2
     },
     {
       "id": 4,
       "name": "David Bradley",
       "locationId": 1,
-      "amployeeId": 3
     },
     {
       "name": "Mike",
@@ -20,7 +18,6 @@ EMPLOYEES = [
     {
       "name": "Dan",
       "locationId": 2,
-      "amployeeId": 4,
       "id": 6
     }
 ]

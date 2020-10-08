@@ -8,12 +8,6 @@ CUSTOMERS = [
       "id": 2,
       "name": "Jeniffer Mills",
       "address": "1000 Lake Ct"
-    },
-    {
-      "email": "1@1.com",
-      "password": "1",
-      "name": "mik swink",
-      "id": 3
     }
 ]
 
