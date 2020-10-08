@@ -4,28 +4,32 @@ ANIMALS = [
       "name": "Walter",
       "breed": "Rottweiler",
       "customerId": 2,
-      "locationId": 1
+      "locationId": 1,
+      "status": "Admitted"
     },
     {
       "id": 2,
       "name": "Calvin",
       "breed": "Cat",
       "locationId": 2,
-      "customerId": 3
+      "customerId": 3,
+      "status": "Admitted"
     },
     {
       "name": "Guinness",
       "breed": "Newfie",
       "locationId": 1,
       "customerId": 3,
-      "id": 3
+      "id": 3,
+      "status": "Admitted"
     },
     {
       "name": "Hobbes",
       "breed": "Cat",
       "locationId": 1,
       "customerId": 3,
-      "id": 4
+      "id": 4,
+      "status": "Admitted"
     }
 ]
 
@@ -78,3 +82,12 @@ def delete_animal(id):
     # If the animal was found, use pop(int) to remove it from list
     if animal_index >= 0:
         ANIMALS.pop(animal_index)
+
+def update_animal(id, new_animal):
+    # Iterate the ANIMALS list, but use enumerate() so that
+    # you can access the index value of each item.
+    for index, animal in enumerate(ANIMALS):
+        if animal["id"] == id:
+            # Found the animal. Update the value.
+            ANIMALS[index] = new_animal
+            break
