@@ -3,6 +3,8 @@ import json
 from models import Location
 
 
+LOCATIONS = []
+
 def get_all_locations():
     # Open a connection to the database
     with sqlite3.connect("./kennel.db") as conn:

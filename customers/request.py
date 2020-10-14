@@ -2,6 +2,8 @@ import sqlite3
 import json
 from models import Customer
 
+CUSTOMERS = []
+
 def get_all_customers():
     # Open a connection to the database
     with sqlite3.connect("./kennel.db") as conn:
@@ -103,7 +105,7 @@ def delete_customer(id):
 def update_customer(id, new_customer):
     # Iterate the CUSTOMERS list, but use enumerate() so that
     # you can access the index value of each item.
-    for index, customer in enumerate(CUSTOMERS):
+    for index, customer in enumerate(CUSTOMERS):    
         if customer["id"] == id:
             # Found the customer. Update the value.
             CUSTOMERS[index] = new_customer
@@ -131,7 +133,7 @@ def get_customers_by_email(email):
         dataset = db_cursor.fetchall()
 
         for row in dataset:
-            customer = Customer(row['id'], row['name'], row['address'])
+            customer = Customer(row['id'], row['name'], row['address'], "", row['password'])
             customers.append(customer.__dict__)
 
     return json.dumps(customers)
