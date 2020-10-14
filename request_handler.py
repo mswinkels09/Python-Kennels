@@ -70,6 +70,11 @@ class HandleRequests(BaseHTTPRequestHandler):
                     response = f"{get_single_customer(id)}"
                 else:
                     response = f"{get_all_customers()}"
+            elif resource == "locations":
+                if id is not None:
+                    pass
+                else:
+                    response = f"{get_all_locations()}"
             elif resource == "employees":
                 if id is not None:
                     response = f"{get_single_employee(id)}"
@@ -165,24 +170,35 @@ class HandleRequests(BaseHTTPRequestHandler):
         self.wfile.write("".encode())
     
     def do_DELETE(self):
-        # Set a 204 response code
-        self._set_headers(204)
 
         # Parse the URL
         (resource, id) = self.parse_url(self.path)
 
         # Delete a single animal from the list
         if resource == "animals":
-            delete_animal(id)
+            success = delete_animal(id) #True or False
         if resource == "locations":
-            delete_location(id)
+            success = delete_location(id)
         if resource == "employees":
-            delete_employee(id)
+            success = delete_employee(id)
         if resource == "customers":
-            delete_customer(id)
+            success = delete_customer(id)
+
+            # Set a 204 response code
+            if success:
+                self._set_headers(204)
+            else:
+                self._set_headers(404)
 
         # Encode the new animal and send in response
         self.wfile.write("".encode())
+
+    def do_OPTIONS(self):
+        self.send_response(200)
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE')
+        self.send_header('Access-Control-Allow-Headers', 'X-Requested-With')
+        self.end_headers()
 
 
 # This function is not inside the class. It is the starting

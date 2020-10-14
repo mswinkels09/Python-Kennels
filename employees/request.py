@@ -2,6 +2,7 @@ import sqlite3
 import json
 from models import Employee
 
+EMPLOYEES = []
 
 def get_all_employees():
     # Open a connection to the database
