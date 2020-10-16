@@ -116,31 +116,27 @@ class HandleRequests(BaseHTTPRequestHandler):
         (resource, id) = self.parse_url(self.path)
 
         # Initialize new animal
-        new_animal = None
-        new_employee = None
-        new_location = None
-        new_customer = None
+        new_resource = None
+
 
         # Add a new animal to the list. Don't worry about
         # the orange squiggle, you'll define the create_animal
         # function next.
         if resource == "animals":
-            new_animal = create_animal(post_body)
+            new_resource = create_animal(post_body)
 
         if resource == "employees":
-            new_employee = create_employee(post_body)
+            new_resource = create_employee(post_body)
         
         if resource == "locations":
-            new_location = create_location(post_body)
+            new_resource = create_location(post_body)
 
         if resource == "customers":
-            new_customer = create_customer(post_body)
+            new_resource = create_customer(post_body)
 
         # Encode the new animal and send in response
-        self.wfile.write(f"{new_animal}".encode())
-        self.wfile.write(f"{new_employee}".encode())
-        self.wfile.write(f"{new_location}".encode())
-        self.wfile.write(f"{new_customer}".encode())
+        self.wfile.write(f"{new_resource}".encode())
+
 
 
     # Here's a method on the class that overrides the parent's method.
@@ -158,11 +154,11 @@ class HandleRequests(BaseHTTPRequestHandler):
         if resource == "animals":
             update_animal(id, post_body)
 
-        if resource == "locations":
-            update_location(id, post_body)
+        # if resource == "locations":
+        #     update_location(id, post_body)
 
-        if resource == "employees":
-            update_employee(id, post_body)
+        # if resource == "employees":
+        #     update_employee(id, post_body)
 
         if resource == "customers":
             update_customer(id, post_body)
@@ -175,9 +171,16 @@ class HandleRequests(BaseHTTPRequestHandler):
         # Parse the URL
         (resource, id) = self.parse_url(self.path)
 
+        # Set a 204 response code
+            
         # Delete a single animal from the list
         if resource == "animals":
             success = delete_animal(id) #True or False
+            if success:
+                self._set_headers(204)
+            else:
+                self._set_headers(404)
+
         if resource == "locations":
             success = delete_location(id)
         if resource == "employees":
@@ -185,11 +188,6 @@ class HandleRequests(BaseHTTPRequestHandler):
         if resource == "customers":
             success = delete_customer(id)
 
-            # Set a 204 response code
-            if success:
-                self._set_headers(204)
-            else:
-                self._set_headers(404)
 
         # Encode the new animal and send in response
         self.wfile.write("".encode())
