@@ -171,15 +171,12 @@ class HandleRequests(BaseHTTPRequestHandler):
         (resource, id) = self.parse_url(self.path)
 
         # Set a 204 response code
-            
+        success = False  
         # Delete a single animal from the list
+
+
         if resource == "animals":
             success = delete_animal(id) #True or False
-            if success:
-                self._set_headers(204)
-            else:
-                self._set_headers(404)
-
         if resource == "locations":
             success = delete_location(id)
         if resource == "employees":
@@ -187,6 +184,10 @@ class HandleRequests(BaseHTTPRequestHandler):
         if resource == "customers":
             success = delete_customer(id)
 
+        if success:
+            self._set_headers(204)
+        else:
+            self._set_headers(404)
 
         # Encode the new animal and send in response
         self.wfile.write("".encode())
@@ -195,7 +196,7 @@ class HandleRequests(BaseHTTPRequestHandler):
         self.send_response(200)
         self.send_header('Access-Control-Allow-Origin', '*')
         self.send_header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE')
-        self.send_header('Access-Control-Allow-Headers', '*')
+        self.send_header('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept') # or *
         self.end_headers()
 
 

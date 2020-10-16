@@ -64,42 +64,52 @@ def get_single_employee(id):
         # Load the single result into memory
         data = db_cursor.fetchone()
 
-        # Create an animal instance from the current row
+        # Create an employee instance from the current row
         employee = Employee(data['id'], data['name'], data['address'],
                             data['location_id'])
 
         return json.dumps(employee.__dict__)
 
-def create_employee(employee):
-    # Get the id value of the last employee in the list
-    max_id = EMPLOYEES[-1]["id"]
+def create_employee(new_employee):
+    with sqlite3.connect("./kennel.db") as conn:
+        db_cursor = conn.cursor()
 
-    # Add 1 to whatever that number is
-    new_id = max_id + 1
+        db_cursor.execute("""
+        INSERT INTO Employee
+            ( name, address, location_id)
+        VALUES
+            ( ?, ?, ?);
+        """, (new_employee['name'], new_employee['address'], 
+                new_employee['location_id'], ))
 
-    # Add an `id` property to the employee dictionary
-    employee["id"] = new_id
+        # The `lastrowid` property on the cursor will return
+        # the primary key of the last thing that got added to
+        # the database.
+        id = db_cursor.lastrowid
 
-    # Add the customer dictionary to the list
-    EMPLOYEES.append(employee)
+        # Add the `id` property to the employee dictionary that
+        # was sent by the client so that the client sees the
+        # primary key in the response.
+        new_employee['id'] = id
 
-    # Return the dictionary with `id` property added
-    return employee
+
+    return json.dumps(new_employee)
 
 def delete_employee(id):
-    # Initial -1 value for employee index, in case one isn't found
-    employee_index = -1
+    with sqlite3.connect("./kennel.db") as conn:
+        db_cursor = conn.cursor()
 
-    # Iterate the EMPLOYEES list, but use enumerate() so that you
-    # can access the index value of each item
-    for index, employee in enumerate(EMPLOYEES):
-        if employee["id"] == id:
-            # Found the employee. Store the current index.
-            employee_index = index
+        db_cursor.execute("""
+        DELETE FROM Employee
+        WHERE id = ?
+        """, (id, ))
 
-    # If the amployee was found, use pop(int) to remove it from list
-    if employee_index >= 0:
-        EMPLOYEES.pop(employee_index)
+        rows_affected = db_cursor.rowcount #checking to make sure there is data that the client is looking for
+
+        if rows_affected == 0:
+            return False
+        else:
+            return True
 
 def update_employee(id, new_employee):
     # Iterate the EMPLOYEES list, but use enumerate() so that
@@ -131,7 +141,7 @@ def get_employees_by_location(location_id):
 
         for row in dataset:
 
-            # Create an animal instance from the current row
+            # Create an employee instance from the current row
             employee = Employee(row['id'], row['name'], row['address'],
                             row['location_id'])
                             

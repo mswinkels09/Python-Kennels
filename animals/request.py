@@ -127,7 +127,7 @@ def delete_animal(id):
         WHERE id = ?
         """, (id, ))
 
-        rows_affected = db_cursor.rowcount
+        rows_affected = db_cursor.rowcount #checking to make sure there is data that the client is looking for
 
         if rows_affected == 0:
             return False
